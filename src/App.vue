@@ -8,7 +8,9 @@
     <div slot="drawer">
       <!-- 菜单内容 -->
       <group title="侧滑导航栏" style="margin:20px 0;">
-          <cell title="麦迪" link="/maidi" @click.native="drawerVisibility = false">
+          <cell title="首页" link="/" @click.native="drawerVisibility = false">
+          </cell>
+          <cell title="麦迪" link="/maidi/message" @click.native="drawerVisibility = false">
           </cell>
           <cell title="科比" link="/kebi" @click.native="drawerVisibility = false">
           </cell>
@@ -21,15 +23,18 @@
           v-if="isShowNav"
           slot="header"
           style="width:100%;position:absolute;left:0;top:0;z-index:100;"
-          title="体育">
-          <span slot="overwrite-left" @click="drawerVisibility = !drawerVisibility">
+          title="App">
+          <span v-if="Rpath == '/' || Rpath.indexOf('/maidi') > -1 || Rpath == '/kebi'" slot="overwrite-left" @click="drawerVisibility = !drawerVisibility">
             <x-icon type="navicon" size="35" style="fill:#fff;position:relative;top:-8px;left:-3px;"></x-icon>
           </span>
         </x-header>
 
         <!-- remember to import BusPlugin in main.js if you use components: x-img and sticky -->
+        <!-- <transition :name="direction">
+          <router-view class="appView"></router-view>
+        </transition> -->
         <transition>
-          <router-view class="router-view"></router-view>
+          <router-view></router-view>
         </transition>
       </view-box>
 
@@ -57,6 +62,8 @@ export default {
     return {
       drawerVisibility : false,
       entryUrl: document.location.href,
+      Rpath : this.$store.getters.getRpath,
+      direction: "slide-right"
     }
   },
   methods : {
@@ -76,10 +83,45 @@ export default {
     //     showMore: true
     //   }
     // },
+  },
+  watch : {
+    $route : {
+      handler : function (to,from) {
+        this.$store.dispatch('useChangeRpath',to.path)
+        this.Rpath = this.$store.getters.getRpath;
+
+
+        const toDepth = to.path.split("/").length;
+        const fromDepth = from.path.split("/").length;
+        // if (to.path == "/") {
+        //   this.direction = "slide-right";
+        // } else if (from.path == "/") {
+        //   this.direction = "slide-left";
+        // }else{
+          this.direction = toDepth < fromDepth ? "slide-right" : "slide-left";
+        // }
+      }
+    }
   }
 }
 </script>
 
 <style>
-
+.appView {
+  position: absolute;
+  width:100%;
+  transition: all 0.1s;
+}
+.slide-left-enter{
+  transform: translate(100%, 0);
+}
+.slide-left-leave-active{
+  transform: translate(-50%, 0);
+}
+.slide-right-enter {
+  transform: translate(-50%, 0);
+}
+.slide-right-leave-active{
+  transform: translate(100%, 0);
+}
 </style>

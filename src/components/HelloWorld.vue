@@ -1,19 +1,33 @@
 <template>
-  <div class="hello">
-    <!-- <x-button type="primary">primary</x-button> -->
+  <div class="hello" style="height:100%">
+    <div style="height:100%">
+       <tab :line-width=2 active-color='#fc378c' v-model="index">
+        <tab-item class="vux-center" :selected="demo2 === item" v-for="(item, index) in list2" @click="demo2 = item" :key="index">{{item}}</tab-item>
+      </tab>
+      <swiper v-model="index" height="100%" :show-dots="false">
+        <swiper-item v-for="(item, index) in list2" :key="index">
+          <div class="tab-swiper vux-center">{{item}} Container</div>
+        </swiper-item>
+      </swiper>
+    </div>
   </div>
 </template>
 
 <script>
-import { XButton } from 'vux'
+import { Tab, TabItem , Swiper, SwiperItem } from 'vux'
 export default {
   name: 'HelloWorld',
   components : {
-    XButton
+    Tab,
+    TabItem,
+    Swiper,
+    SwiperItem
   },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      index: 0,
+      demo2: '精选',
+      list2: ['精选', '美食', '电影', '酒店', '外卖']
     }
   }
 }
@@ -34,5 +48,8 @@ li {
 }
 a {
   color: #42b983;
+}
+.vux-slider {
+  height: 100%;
 }
 </style>

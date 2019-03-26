@@ -1,6 +1,7 @@
 <template>
   <div>
      <swiper loop auto :list="demo06_list" :index="demo06_index" @on-index-change="demo06_onIndexChange"></swiper>
+     <divider><router-link to="/juesha">点击科比经典绝杀镜头</router-link></divider>  
   </div>
 </template>
 
